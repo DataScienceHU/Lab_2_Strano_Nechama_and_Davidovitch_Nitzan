@@ -1,0 +1,49 @@
+---
+title: "Lab_2"
+output: html_document
+date: '2022-06-13'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(tidyverse) # This includes dplyr, stringr, ggplot2, .. 
+library(data.table)
+library(ggthemes)
+library(stringr)
+library(tidytext) 
+library(rvest)
+``` 
+Reading the HTML as text
+```{r, include=FALSE}
+url <- 'https://www.gutenberg.org/files/2701/2701-h/2701-h.htm'
+webpage <- read_html(url)
+```
+***1***
+***a*** Reading the first line of the book
+```{r}
+# We are creating the first paragraph, and then extractig the first line out of it. 
+first_sentence <- webpage %>% html_nodes("div") %>% html_text() 
+first_sentence[1]
+```
+***b*** Split the text string into words, separated by spaces, commas (`,`), periods (`.`), and new line characters (`\n` and `\r`). How many words are there? 
+```{r}
+all_words_html <- webpage %>% html_text() %>% str_split(",|\\.|[:space:]")
+all_words_html <- all_words_html[[1]]
+all_words_html <- all_words_html[all_words_html!=""]
+print(length(all_words_html))
+```
+```{r}
+distribution_func <- function (all_words_html) {
+  for (word in all_words_html) {
+    if (length(word) == 1){
+      
+    }
+      
+  }
+}
+
+  
+```
