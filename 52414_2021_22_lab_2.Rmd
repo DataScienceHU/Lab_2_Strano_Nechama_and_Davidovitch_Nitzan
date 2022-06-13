@@ -192,4 +192,4 @@ wordle_match <- function(guess, word)  # 1: correct location, -1: wrong location
 
 ```
 
-
+Hi! I am checking if it works.
