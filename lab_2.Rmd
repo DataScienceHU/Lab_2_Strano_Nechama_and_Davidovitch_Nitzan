@@ -49,12 +49,12 @@ len_words <- str_length(words)
 words_dist<- table(len_words)/length(words)
 barplot(words_dist, main = "Distribution of word lenghts", xlab = "Lenght of word", ylab = "Distribution of word length")
 
-median(words)
-mean(words)
+median(len_words)
+mean(len_words)
+max(len_words)
 
-longest
-most common
-asdasd
+#most common
+
 ```
 ***C*** Count the words frequencies in the text - i.e. the number of times each unique word appears in the text.
 Show the top 10 most frequent words with their frequencies. Is the list of top words surprising? explain. 
