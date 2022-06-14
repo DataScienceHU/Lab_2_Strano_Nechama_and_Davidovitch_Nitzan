@@ -18,7 +18,6 @@ library(rvest)
 ``` 
 Reading the HTML as text
 ```{r, include=FALSE}
-
 url <- 'https://www.gutenberg.org/files/2701/2701-h/2701-h.htm'
 webpage <- read_html(url)
 mobybook = html_text(webpage)
@@ -78,6 +77,10 @@ It makes sense that these are the 10 most frequent words because they are the mo
 ***a***
 
 ```{r}
+webpage <- read_html("https://www.gutenberg.org/files/2701/2701-h/2701-h.htm#link2HCH0004")
+moby_lines <- html_text(html_nodes(webpage, 'title,p,h1,h2,h3'))
+mobybook <- paste(moby_lines, collapse = " ")
+
 
 strsplit(mobybook,"\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n")
 
