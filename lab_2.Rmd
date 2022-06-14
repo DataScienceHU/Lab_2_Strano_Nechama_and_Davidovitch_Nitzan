@@ -18,32 +18,45 @@ library(rvest)
 ``` 
 Reading the HTML as text
 ```{r, include=FALSE}
+
 url <- 'https://www.gutenberg.org/files/2701/2701-h/2701-h.htm'
 webpage <- read_html(url)
+
 ```
 ***1***
-***a*** Reading the first line of the book
+***a*** Creating the first paragraph, and then extracting the first line out of it. 
 ```{r}
-# We are creating the first paragraph, and then extractig the first line out of it. 
+
 first_sentence <- webpage %>% html_nodes("div") %>% html_text() 
 first_sentence[1]
+
 ```
-***b*** Split the text string into words, separated by spaces, commas (`,`), periods (`.`), and new line characters (`\n` and `\r`). How many words are there? 
+
+***b*** Splitting the text string into words, separated by spaces, commas (`,`), periods (`.`), and new line characters (`\n` and `\r`). And printing how many words there are.
 ```{r}
+
 all_words_html <- webpage %>% html_text() %>% str_split(",|\\.|[:space:]")
 all_words_html <- all_words_html[[1]]
-all_words_html <- all_words_html[all_words_html!=""]
-print(length(all_words_html))
-```
-```{r}
-distribution_func <- function (all_words_html) {
-  for (word in all_words_html) {
-    if (length(word) == 1){
-      
-    }
-      
-  }
-}
+words <- all_words_html[all_words_html!=""]
+print(length(words))
 
-  
+
+```
+Compute the distribution of lengths of words you got, and plot using a bar-plot and computing the `median`, `mean`, `longest` and `most common` word lengths.
+```{r}
+
+len_words <- str_length(words)
+words_dist<- table(len_words)/length(words)
+barplot(words_dist, main = "Distribution of word lenghts", xlab = "Lenght of word", ylab = "Distribution of word length")
+
+median(words)
+mean(words)
+
+longest
+most common
+```
+***C*** Count the words frequencies in the text - i.e. the number of times each unique word appears in the text.
+Show the top 10 most frequent words with their frequencies. Is the list of top words surprising? explain. 
+
+```{r}
 ```
