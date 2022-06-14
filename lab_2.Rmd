@@ -60,4 +60,9 @@ asdasd
 Show the top 10 most frequent words with their frequencies. Is the list of top words surprising? explain. 
 
 ```{r}
+
+
+sort(table(words), decreasing = TRUE)[1:10] 
+
+https://statisticsglobe.com/extract-most-common-values-from-vector-in-r
 ```
