@@ -21,14 +21,17 @@ Reading the HTML as text
 
 url <- 'https://www.gutenberg.org/files/2701/2701-h/2701-h.htm'
 webpage <- read_html(url)
+mobybook = html_text(webpage)
 
 ```
 ***1***
 ***a*** Creating the first paragraph, and then extracting the first line out of it. 
 ```{r}
 
-first_sentence <- webpage %>% html_nodes("div") %>% html_text() 
-first_sentence[1]
+book <- webpage %>% html_nodes("div") %>% html_text()
+class(book)
+book[1]
+
 
 ```
 
@@ -61,10 +64,86 @@ max(len_words)
 Show the top 10 most frequent words with their frequencies. Is the list of top words surprising? explain. 
 
 ```{r}
-sort(table(words), decreasing = TRUE)
+sort(table(words), decreasing = TRUE)[1]
 
 sort(table(words), decreasing = TRUE)[1:10] 
 
 ```
 
 It makes sense that these are the 10 most frequent words because they are the most common words in english - conjunction words.
+
+
+***2***
+
+***a***
+
+```{r}
+
+strsplit(mobybook,"\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n")
+
+chapters = strsplit(mobybook,"CHAPTER")
+chapters[[1]][200]
+chapters = chapters[[1]][137:length(chapters[[1]])]
+length(chapters)
+
+
+  #"\r\n    \r\n    \r\n      \r\n       \r\n    \r\n    \r\n      \r\n    \r\n      "
+#webpage
+#elements <- strsplit(book,split ='\n\n\n\n\n\n')[[1]]
+#chapters <- elements[2:length(elements)]
+
+
+#chapters = webpage %>% html_text()  %>% str_split("\r\n    \r\n    \r\n      \r\n       \r\n    \r\n    \r\n      \r\n    \r\n      ")
+
+#chapters2 = webpage %>% html_text()  %>% str_split("\r\n     \r\n    \r\n      \r\n       \r\n    \r\n    \r\n      \r\n    \r\n      ")
+
+#chapters = webpage %>% html_text()  %>% str_split("\r\n    \r\n    \r\n      \r\n       \r\n    \r\n    \r\n      \r\n    \r\n      ")
+
+#chapters[[1]][14]
+#chapters2[[1]][2]
+
+#all_chapters = c(chapters,chapters2)
+#all_chapters[[2]]
+
+```
+
+
+
+
+***B***
+
+```{r}
+
+length(chapters)
+chapters = chapters
+
+class(mobybook)
+
+word_frequencies = function(word,chapters){
+  freq_vec = c()
+  for (i in length(array)){ 
+    chapter_words <- strsplit(chapters[[1]][i],",|\\.|[:space:]")
+    #all_words_html <- all_words_html[[1]]
+    chapter_words <- chapter_words[all_words_html!=""]
+    total_words = length(chapter_words)
+    word_freq = sort(table(words), decreasing = TRUE)
+    freq = word_freq[word_freq[,1]==word,2]
+    freq_vec = c(freq_vec,freq/total_words)
+    
+    }
+  return(freq_vec) 
+}
+
+word_frequencies("Ahab",chapters)
+ggplot(data = mobybook,aes(x=c(0:135)))
+
+word_frequencies("Moby",chapters)
+
+word_frequencies("sea",chapters)
+
+
+```
+
+
+
+
