@@ -80,16 +80,18 @@ It makes sense that these are the 10 most frequent words because they are the mo
 webpage <- read_html("https://www.gutenberg.org/files/2701/2701-h/2701-h.htm#link2HCH0004")
 moby_lines <- html_text2(html_nodes(webpage, 'title,p,h1,h2,h3'))
 mobybook <- paste(moby_lines, collapse = " ")
+length(mobybook)
+
+# add ETYMOLOGY
+
+mobybooksp = strsplit(mobybook,"\r \r \r \r \r ")
+mobybook[[1]][1]
 
 
-mobybook = strsplit(mobybook,"\r \r \r \r \r ")
-mobybook[[1]][2]
-
-
-chapters = strsplit(mobybook,"CHAPTER")
-chapters[[1]][200]
-chapters = chapters[[1]][137:length(chapters[[1]])]
-length(chapters)
+#chapters = strsplit(mobybook,"CHAPTER")
+#chapters[[1]][200]
+#chapters = chapters[[1]][137:length(chapters[[1]])]
+#length(chapters)
 
 
   #"\r\n    \r\n    \r\n      \r\n       \r\n    \r\n    \r\n      \r\n    \r\n      "
@@ -148,6 +150,32 @@ word_frequencies("sea",chapters)
 
 
 ```
+
+***4***
+***a***
+
+```{r}
+mobybook
+gsub("\\s+#.*$", "", mobybook)
+v = strsplit(mobybook, " ")
+class(v)
+
+```
+
+
+
+***5***
+***a***
+
+```{r}
+url2 = "https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt"
+common = read.table(url2)
+
+sort(table(common), decreasing = TRUE)
+
+```
+
+
 
 
 
