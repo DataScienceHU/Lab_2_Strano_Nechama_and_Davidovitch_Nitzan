@@ -54,6 +54,7 @@ mean(words)
 
 longest
 most common
+asdasd
 ```
 ***C*** Count the words frequencies in the text - i.e. the number of times each unique word appears in the text.
 Show the top 10 most frequent words with their frequencies. Is the list of top words surprising? explain. 
