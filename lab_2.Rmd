@@ -78,11 +78,13 @@ It makes sense that these are the 10 most frequent words because they are the mo
 
 ```{r}
 webpage <- read_html("https://www.gutenberg.org/files/2701/2701-h/2701-h.htm#link2HCH0004")
-moby_lines <- html_text(html_nodes(webpage, 'title,p,h1,h2,h3'))
+moby_lines <- html_text2(html_nodes(webpage, 'title,p,h1,h2,h3'))
 mobybook <- paste(moby_lines, collapse = " ")
 
 
-strsplit(mobybook,"\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n")
+mobybook = strsplit(mobybook,"\r \r \r \r \r ")
+mobybook[[1]][2]
+
 
 chapters = strsplit(mobybook,"CHAPTER")
 chapters[[1]][200]
