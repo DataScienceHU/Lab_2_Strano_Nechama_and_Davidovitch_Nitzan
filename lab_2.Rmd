@@ -56,13 +56,15 @@ max(len_words)
 #most common
 
 ```
+
 ***C*** Count the words frequencies in the text - i.e. the number of times each unique word appears in the text.
 Show the top 10 most frequent words with their frequencies. Is the list of top words surprising? explain. 
 
 ```{r}
-
+sort(table(words), decreasing = TRUE)
 
 sort(table(words), decreasing = TRUE)[1:10] 
 
-https://statisticsglobe.com/extract-most-common-values-from-vector-in-r
 ```
+
+It makes sense that these are the 10 most frequent words because they are the most common words in english - conjunction words.
