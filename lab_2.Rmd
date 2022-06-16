@@ -15,6 +15,7 @@ library(ggthemes)
 library(stringr)
 library(tidytext) 
 library(rvest)
+scipen=50
 ``` 
 Reading the HTML as text
 ```{r, include=FALSE}
@@ -37,15 +38,15 @@ book[1]
 
 ***b*** Splitting the text string into words, separated by spaces, commas (`,`), periods (`.`), and new line characters (`\n` and `\r`). And printing how many words there are.
 ```{r}
-
+#lower_text <- str_to_lower(book, locale = "en")
 all_words_html <- webpage %>% html_text() %>% str_split(",|\\.|[:space:]")
 all_words_html <- all_words_html[[1]]
 words <- all_words_html[all_words_html!=""]
 print(length(words))
 
-
-  ```
+```
 Compute the distribution of lengths of words you got, and plot using a bar-plot and computing the `median`, `mean`, `longest` and `most common` word lengths.
+
 ```{r}
 
 len_words <- str_length(words)
@@ -86,87 +87,91 @@ length(mobybook)
 # add ETYMOLOGY
 
 chapters = strsplit(mobybook,"\r \r \r \r \r ")
-mobybook[[1]][1]
-
-
-#chapters = strsplit(mobybook,"CHAPTER")
-#chapters[[1]][200]
-#chapters = chapters[[1]][137:length(chapters[[1]])]
-#length(chapters)
-
-
-  #"\r\n    \r\n    \r\n      \r\n       \r\n    \r\n    \r\n      \r\n    \r\n      "
-#webpage
-#elements <- strsplit(book,split ='\n\n\n\n\n\n')[[1]]
-#chapters <- elements[2:length(elements)]
-
-
-#chapters = webpage %>% html_text()  %>% str_split("\r\n    \r\n    \r\n      \r\n       \r\n    \r\n    \r\n      \r\n    \r\n      ")
-
-#chapters2 = webpage %>% html_text()  %>% str_split("\r\n     \r\n    \r\n      \r\n       \r\n    \r\n    \r\n      \r\n    \r\n      ")
-
-#chapters = webpage %>% html_text()  %>% str_split("\r\n    \r\n    \r\n      \r\n       \r\n    \r\n    \r\n      \r\n    \r\n      ")
-
-#chapters[[1]][14]
-#chapters2[[1]][2]
-
-#all_chapters = c(chapters,chapters2)
-#all_chapters[[2]]
-
+chapters = chapters[[1]][2:137]
+chapters
 ```
-
-
-
-
 ***B***
 
 ```{r}
 
-length(chapters)
-chapters = chapters
+chapters = strsplit(mobybook,"\r \r \r \r \r ")
+chapters = chapters[[1]][2:137]
 
-class(mobybook)
+#chapters
+#length(chapters)
 
-word_frequencies = function(word,chapters){
+
+freq_vec = c()
+    all_words_c <- chapters[1] %>% str_split(",|\\.|[:space:]")
+    all_words_c <- all_words_c[[1]]
+    words_c <- all_words_c[all_words_c!=""]
+    total_words = length(words_c)
+    word_freq = sort(table(words_c), decreasing = TRUE)
+    our_word = word_freq["Ahab"]
+
+    freq_vec = c(freq_vec,word_freq/total_words)
+    
+
+
+word_frequencies = function(word,array){
   freq_vec = c()
   for (i in length(array)){ 
-    chapter_words <- strsplit(chapters[[1]][i],",|\\.|[:space:]")
-    #all_words_html <- all_words_html[[1]]
-    chapter_words <- chapter_words[all_words_html!=""]
-    total_words = length(chapter_words)
-    word_freq = sort(table(words), decreasing = TRUE)
-    freq = word_freq[word_freq[,1]==word,2]
-    freq_vec = c(freq_vec,freq/total_words)
-    
+    all_words_c <- chapters[i] %>% str_split(",|\\.|[:space:]")
+    all_words_c <- all_words_c[[1]]
+    words_c <- all_words_c[all_words_c!=""]
+    total_words_chap = length(words_c)
+    word_freq = sort(table(words_c), decreasing = TRUE)
+    our_word = word_freq[word]
+    freq_vec = c(freq_vec,our_word/total_words_chap)
     }
   return(freq_vec) 
 }
-
-word_frequencies("Ahab",chapters)
-ggplot(data = mobybook,aes(x=c(0:135)))
+array = c(1:137)
+word_frequencies("Ahab",array)
+ggplot(data = mobybook,aes(x=c(0:137)))
 
 word_frequencies("Moby",chapters)
 
 word_frequencies("sea",chapters)
 
-
 ```
-
 ***4***
-***a***
-
+***A***
 ```{r}
 
 mobybook_clean = str_replace_all(mobybook, "[^a-zA-Z]", " ")
-mobybook_clean
 mobybook_clean = tolower(mobybook_clean)
-mobybook_clean = toString(mobybook_clean)
-mobybook_clean = strsplit(mobybook_clean, " ")
+#All words in mobybook
+mobybook_split = strsplit(mobybook_clean, " ")
+count_letters <- nchar(mobybook_split[[1]] )
+#list of all five-letter with duplicates 
+five_letters <- mobybook_split[[1]][count_letters ==5]
+length(five_letters)
+five_unique = unique(five_letters)
+length(five_unique)
+#top 10 most frequent five-letter words with their frequencies
+sort(table(five_letters), decreasing = TRUE)[1:10]
+```
+***B***
+```{r}
+alphabet <- letters[1:26]
+letter_freq <- table(let = unlist(strsplit(five_letters,'')),pos = sequence(nchar(five_letters)))
 
+heatmap(letter_freq, Colv = NA, Rowv = NA, scale = "column", xlab = "column", ylab = "letter", main = "Letters Heatmap")
+```
+We can see that for the- 
+first location:w
+second location:h
+third location:a
+fourth location:e
+fifth location:e
+Do you see a strong effect for the location?????????????
+
+***C***
+
+```{r}
 
 ```
-
-
 
 ***5***
 ***a***
@@ -177,10 +182,17 @@ common = read.table(url2)
 
 sort(table(common), decreasing = TRUE)
 
+
+```{r}
+#creating a table with 5 columns named 1-5
+#making a list of letters where each
+#Japan Population Data Frame - Step 1    
+#Japan.Population <- data.frame(11, "Japan", 126860301,    127202192, "-0.27%")      
+  
+#Naming the Data Frame - Step 2  
+#names(Japan.Population) <- c("Rank", "Country", "Population.2019", "Population.2018", "Growth.Rate")  
+  
+#Using rbind() function to insert above observation  
+#WorldPopulation.Newdf <- rbind(DataFrame.WorldPopulation, Japan.Population)
 ```
-
-
-
-
-
 

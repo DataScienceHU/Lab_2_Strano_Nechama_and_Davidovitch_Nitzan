@@ -93,7 +93,7 @@ b. Suppose that instead, we took all **unique** words that appear in the book, a
 Show the top 10 most frequent five-letter words with their frequencies.  
 
 b. Compute letter frequencies statistics of the five-letter words: 
-That is, for each of the five locations in the word (first, second,..), how many times each of the English letters `a`, `b`,...,`z` appeared in your (non-unique) list of words. Store the result in a `26-by-5` table and show it as a heatmap. Which letter is most common in each location? Do you see a strong effect for the location? 
+That is, for each of the five locations in the word (first, second,..), how many times each of the English letters `a`, `b`,...,`z` appeared in your (non-unique) list of words. Store the result in a `26-by-5` table and show it as a heat map. Which letter is most common in each location? Do you see a strong effect for the location? 
 
 
 c. Consider the following random model for typing words: we have a `26-by-5` table of probabilities $p_{ij}$ for i from $1$ to $5$, 
