@@ -34,6 +34,7 @@ book[1]
 
 ```
 
+
 ***b*** Splitting the text string into words, separated by spaces, commas (`,`), periods (`.`), and new line characters (`\n` and `\r`). And printing how many words there are.
 ```{r}
 
@@ -155,28 +156,13 @@ word_frequencies("sea",chapters)
 ***a***
 
 ```{r}
-mobybook
-#mobybook1 <- sub("[0-9.]+$", "", mobybook )
 
-#mobybook <- gsub("[[:punct:]]*span[[:punct:]]*", "", mobybook) # Remove 
+mobybook_clean = str_replace_all(mobybook, "[^a-zA-Z]", " ")
+mobybook_clean
+mobybook_clean = tolower(mobybook_clean)
+mobybook_clean = toString(mobybook_clean)
+mobybook_clean = strsplit(mobybook_clean, " ")
 
-class(chapters)
-mobybook1 = strsplit(mobybook,split="\r|\n| |\\.|\\.|\\!|\\;|\\,")
-mobybook1 = mobybook1[mobybook1 != ""]
-
-#mobybook2 = gsub('[\r]'," ",mobybook1)
-
-#mobybook1
-
-#mobybook = gsub('\\s?(\\d+|\\.)|[\r]|[\n]|,|-|!|;| -', '', mobybook)
-#mobybook = gsub('[\r]', '', mobybook)
-
-
-#mobybook = gsub("\\s+#.*$-", "", mobybook)
-#mobybook1<- sub("\\.", "", mobybook)
-
-
-#class(v)
 
 ```
 
