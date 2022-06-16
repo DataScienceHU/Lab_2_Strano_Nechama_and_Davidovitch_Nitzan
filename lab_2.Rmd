@@ -156,7 +156,6 @@ sort(table(five_letters), decreasing = TRUE)[1:10]
 ```{r}
 alphabet <- letters[1:26]
 letter_freq <- table(let = unlist(strsplit(five_letters,'')),pos = sequence(nchar(five_letters)))
-
 heatmap(letter_freq, Colv = NA, Rowv = NA, scale = "column", xlab = "column", ylab = "letter", main = "Letters Heatmap")
 ```
 We can see that for the- 
@@ -170,6 +169,44 @@ Do you see a strong effect for the location?????????????
 ***C***
 
 ```{r}
+#Creating table for probability's according to each letter
+alphabet <- letters[1:26]
+letter_freq_un <- table(let = unlist(strsplit(unique(five_letters),'')),pos = sequence(nchar(unique(five_letters))))
+letter_freq_un2 = letter_freq_un/(length(unique(five_letters)))
+
+#help function in order to multiply a vector
+multiply <- function(vec){
+    out <- 1
+    for(i in 1:length(vec)){
+         out <- out*vec[i]
+    }
+    out
+}
+
+(sort(table(freq_prb_table), decreasing = TRUE)[1:10])
+
+probabilities = function (tablegiven,array) {
+  vec_prob_let <- c()
+  final_pro <- c()
+  for (word in array){
+    for (j in 1:5){
+      letter <- word[j]
+      print(letter)
+      index_row<- match("letter",alphabet)
+      pij<- letter_freq_un2[index_row,j]
+      print(pij)
+      vec_prob_let<- c(vec_prob_let,pij)
+      print(vec_prob_let)
+    probability <- multiply(vec_prob_let)
+    final_pro <- c(final_pro,probability)
+  
+  #freq_prb_table = as.table(setNames(array,final_pro))
+    }}
+  return (probability)
+
+}
+#word_array = c("frozen","skull","winds","worse","there","where")
+probabilities(letter_freq_un2,unique(five_letters))
 
 ```
 
