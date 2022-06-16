@@ -43,7 +43,7 @@ words <- all_words_html[all_words_html!=""]
 print(length(words))
 
 
-```
+  ```
 Compute the distribution of lengths of words you got, and plot using a bar-plot and computing the `median`, `mean`, `longest` and `most common` word lengths.
 ```{r}
 
@@ -84,7 +84,7 @@ length(mobybook)
 
 # add ETYMOLOGY
 
-mobybooksp = strsplit(mobybook,"\r \r \r \r \r ")
+chapters = strsplit(mobybook,"\r \r \r \r \r ")
 mobybook[[1]][1]
 
 
@@ -156,9 +156,27 @@ word_frequencies("sea",chapters)
 
 ```{r}
 mobybook
-gsub("\\s+#.*$", "", mobybook)
-v = strsplit(mobybook, " ")
-class(v)
+#mobybook1 <- sub("[0-9.]+$", "", mobybook )
+
+#mobybook <- gsub("[[:punct:]]*span[[:punct:]]*", "", mobybook) # Remove 
+
+class(chapters)
+mobybook1 = strsplit(mobybook,split="\r|\n| |\\.|\\.|\\!|\\;|\\,")
+mobybook1 = mobybook1[mobybook1 != ""]
+
+#mobybook2 = gsub('[\r]'," ",mobybook1)
+
+#mobybook1
+
+#mobybook = gsub('\\s?(\\d+|\\.)|[\r]|[\n]|,|-|!|;| -', '', mobybook)
+#mobybook = gsub('[\r]', '', mobybook)
+
+
+#mobybook = gsub("\\s+#.*$-", "", mobybook)
+#mobybook1<- sub("\\.", "", mobybook)
+
+
+#class(v)
 
 ```
 
