@@ -283,8 +283,7 @@ geuss = c("south", "north")
 dictionary <- common_words
 
 
-
- #help function for dictionary
+#help function for dictionary
 data_dict2 = function(dictionary){
   df <- data.frame(dictionary)
   df[c(1:5)]<- str_split_fixed(df$dictionary,"",5)
@@ -293,29 +292,30 @@ data_dict2 = function(dictionary){
 }
 
 dictionary = data_dict2(geuss)
-#new_dictionary <- subset(blah,blah[1] == "b")
-#new_dictionary <- subset(blah, dictionary!="b" & V2!="b"& V3!="b" & V4!="b" & V5!="b")
-#new_dictionary <- subset(blah, dictionary!="t" )
+
 
 Wordle = function(geuss,matching,dictionary){
   for (i in 1:length(geuss)){
     for (j in 1:5){
       
-      if (matching[[i]][j] == -1 ){
+      if (isTRUE(matching[[i]][j] == -1)==TRUE ){
         geuss_word <- as.vector(str_split_fixed(geuss[i], pattern = "", n = nchar(geuss[i])))
         letter <- geuss_word[j]
         new_dictionary <- subset(df,df[j]!=letter)
-        } else if (matching[[i]][j] == 0){
+        
+        } else if (isTRUE(matching[[i]][j] == 0)==TRUE){
         geuss_word <- as.vector(str_split_fixed(geuss[i], pattern = "", n = nchar(geuss[i])))
         letter <- geuss_word[j]
-        new_dictionary <-       subset(new_dictionary,dictionary!=letter,V2!=letter,V3!=letter,V4!=letter,V5!=letter)
-        } else if (matching[[i]][j] == 1){
+        new_dictionary <- subset(new_dictionary,dictionary!=letter & V2!=letter & V3!=letter & V4!=letter & V5!=letter)
+        
+        } else if (isTRUE(matching[[i]][j] == 1)==TRUE){
         geuss_word <- as.vector(str_split_fixed(geuss[i], pattern = "", n = nchar(geuss[i])))
         letter <- geuss_word[j]
         new_dictionary <- subset(df,df[j]==letter)
         }
     }
   }
+return(new_dictionary)
 }
     
 check = Wordle(geuss,matching,dictionary)
