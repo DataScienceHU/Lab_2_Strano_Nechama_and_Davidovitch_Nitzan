@@ -29,7 +29,6 @@ mobybook = html_text(webpage)
 ```{r}
 
 book <- webpage %>% html_nodes("div") %>% html_text()
-class(book)
 book[1]
 
 
@@ -65,7 +64,6 @@ max(len_words)
 Show the top 10 most frequent words with their frequencies. Is the list of top words surprising? explain. 
 
 ```{r}
-sort(table(words), decreasing = TRUE)[1]
 
 sort(table(words), decreasing = TRUE)[1:10] 
 
@@ -88,7 +86,6 @@ length(mobybook)
 
 chapters = strsplit(mobybook,"\r \r \r \r \r ")
 chapters = chapters[[1]][2:137]
-chapters
 ```
 ***B***
 
@@ -101,40 +98,59 @@ chapters = chapters[[1]][2:137]
 #length(chapters)
 
 
-freq_vec = c()
-    all_words_c <- chapters[1] %>% str_split(",|\\.|[:space:]")
-    all_words_c <- all_words_c[[1]]
-    words_c <- all_words_c[all_words_c!=""]
-    total_words = length(words_c)
-    word_freq = sort(table(words_c), decreasing = TRUE)
-    our_word = word_freq["Ahab"]
-
-    freq_vec = c(freq_vec,word_freq/total_words)
     
-
-
+    
+#Count number of elements equal to certain value
+    
 word_frequencies = function(word,array){
   freq_vec = c()
-  for (i in length(array)){ 
+  for (i in array){ 
     all_words_c <- chapters[i] %>% str_split(",|\\.|[:space:]")
     all_words_c <- all_words_c[[1]]
     words_c <- all_words_c[all_words_c!=""]
     total_words_chap = length(words_c)
     word_freq = sort(table(words_c), decreasing = TRUE)
     our_word = word_freq[word]
-    freq_vec = c(freq_vec,our_word/total_words_chap)
+    if (is.na(our_word)){
+      freq_vec = c(freq_vec,0)}
+    else {
+      freq_vec = c(freq_vec,our_word/total_words_chap)}
+    
     }
   return(freq_vec) 
 }
 array = c(1:137)
-word_frequencies("Ahab",array)
-ggplot(data = mobybook,aes(x=c(0:137)))
+word = "Ahab"
+word_frequencies(word,array)
 
-word_frequencies("Moby",chapters)
+#ggplot(data = mobybook,aes(x=c(0:137)))
+
+word_frequencies("Moby",array)
 
 word_frequencies("sea",chapters)
 
 ```
+***3***
+***A***
+***(i)-Formula***
+$$P_r(X_A=\omega_i, X_B=\omega_i)= P_r(X_A=\omega_1, X_B=\omega_1)\cup P_r(X_A=\omega_2, X_B=\omega_2)...\cup P_r(X_A=\omega_n, X_B=\omega_n)$$
+
+$*: P(A\cup B)=P(A)+P(B)-P(A\cap B)$, because the intersection is 0, we can rewrite it as: $P(A\cup B)=P(A)+P(B)$. Hence, 
+$$P_r(X_A=\omega_i, X_B=\omega_i)= P_r(X_A=\omega_1, X_B=\omega_1)+P_r(X_A=\omega_2, X_B=\omega_2)...+P_r(X_A=\omega_n, X_B=\omega_n)$$
+$$\Longrightarrow P_r(X_A=\omega_i, X_B=\omega_i)=\sum_{i=1}^nP_r(X_A=\omega_i, X_B=\omega_i)$$
+***(ii)-Simulation***
+
+
+
+
+
+
+***B***
+
+
+
+
+
 ***4***
 ***A***
 ```{r}
@@ -146,15 +162,12 @@ mobybook_split = strsplit(mobybook_clean, " ")
 count_letters <- nchar(mobybook_split[[1]] )
 #list of all five-letter with duplicates 
 five_letters <- mobybook_split[[1]][count_letters ==5]
-length(five_letters)
 five_unique = unique(five_letters)
-length(five_unique)
 #top 10 most frequent five-letter words with their frequencies
 sort(table(five_letters), decreasing = TRUE)[1:10]
 ```
 ***B***
 ```{r}
-alphabet <- letters[1:26]
 letter_freq <- table(let = unlist(strsplit(five_letters,'')),pos = sequence(nchar(five_letters)))
 heatmap(letter_freq, Colv = NA, Rowv = NA, scale = "column", xlab = "column", ylab = "letter", main = "Letters Heatmap")
 ```
@@ -169,7 +182,7 @@ Do you see a strong effect for the location?????????????
 ***C***
 
 ```{r}
-#Creating table for probability's according to each letter
+#Creating table of probability's according to each letter
 alphabet <- letters[1:26]
 letter_freq_un <- table(let = unlist(strsplit(unique(five_letters),'')),pos = sequence(nchar(unique(five_letters))))
 letter_freq_un2 = letter_freq_un/(length(unique(five_letters)))
@@ -183,30 +196,41 @@ multiply <- function(vec){
     out
 }
 
-(sort(table(freq_prb_table), decreasing = TRUE)[1:10])
 
 probabilities = function (tablegiven,array) {
   vec_prob_let <- c()
   final_pro <- c()
   for (word in array){
     for (j in 1:5){
-      letter <- word[j]
-      print(letter)
-      index_row<- match("letter",alphabet)
+      letter = substr(word,j,j)
+      #print(letter)
+      index_row<- match(letter,alphabet)
+      #print(index_row)
       pij<- letter_freq_un2[index_row,j]
-      print(pij)
+      #print(pij)
       vec_prob_let<- c(vec_prob_let,pij)
-      print(vec_prob_let)
-    probability <- multiply(vec_prob_let)
-    final_pro <- c(final_pro,probability)
-  
-  #freq_prb_table = as.table(setNames(array,final_pro))
-    }}
-  return (probability)
+    #print(vec_prob_let)
+#print(probability)
+#print(final_pro)
+    } 
+  probability <- multiply(vec_prob_let)
+  final_pro <- c(final_pro,probability)
+
+  }
+freq_prb_table = as.table(setNames(final_pro,array))
+
+
+return (freq_prb_table)
 
 }
-#word_array = c("frozen","skull","winds","worse","there","where")
-probabilities(letter_freq_un2,unique(five_letters))
+
+
+#word_array = c("where","there")
+#frequency_five = probabilities(letter_freq_un2,word_array)
+
+frequency_five = probabilities(letter_freq_un2,unique(five_letters))
+sort(frequency_five, decreasing = TRUE)[1:10]
+
 
 ```
 
@@ -215,21 +239,91 @@ probabilities(letter_freq_un2,unique(five_letters))
 
 ```{r}
 url2 = "https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt"
-common = read.table(url2)
-
-sort(table(common), decreasing = TRUE)
-
-
-```{r}
-#creating a table with 5 columns named 1-5
-#making a list of letters where each
-#Japan Population Data Frame - Step 1    
-#Japan.Population <- data.frame(11, "Japan", 126860301,    127202192, "-0.27%")      
+common <- read_html(url2,  encoding = "UTF-8")
+common_words <- html_text2(common)
+common_words <- strsplit(common_words ,split = "(\\s)")
+common_words[[1]][1]
   
-#Naming the Data Frame - Step 2  
-#names(Japan.Population) <- c("Rank", "Country", "Population.2019", "Population.2018", "Growth.Rate")  
   
-#Using rbind() function to insert above observation  
-#WorldPopulation.Newdf <- rbind(DataFrame.WorldPopulation, Japan.Population)
+list_string = function(list){
+  vec_string <- c()
+  for (i in 1:length(common_words[[1]])){
+    vec_string <-c(vec_string,common_words[[1]][i])}
+  
+  return(vec_string)
+}
+
+words_string = list_string(common_words) 
+
+
+letter_freq_dict <- table(let = unlist(strsplit(words_string,'')),pos = sequence(nchar(words_string)))
+
+heatmap(letter_freq_dict, Colv = NA, Rowv = NA, scale = "column", xlab = "column", ylab = "letter", main = "Letters Heatmap")
+
 ```
+We can see that for the- 
+first location:s
+second location:a
+third location:a
+fourth location:e
+fifth location:s
 
+compared to:
+first location:w
+second location:h
+third location:a
+fourth location:e
+fifth location:e
+
+***B***
+```{r}
+
+matching = c(c(-1, 1, 1, 0, 0),c(0, 1, 0, 0, 0))
+geuss = c("south", "north")
+dictionary <- common_words
+
+
+
+ #help function for dictionary
+data_dict2 = function(dictionary){
+  df <- data.frame(dictionary)
+  df[c(1:5)]<- str_split_fixed(df$dictionary,"",5)
+  df <- df[c(1:5)]
+  return(df)
+}
+
+dictionary = data_dict2(geuss)
+#new_dictionary <- subset(blah,blah[1] == "b")
+#new_dictionary <- subset(blah, dictionary!="b" & V2!="b"& V3!="b" & V4!="b" & V5!="b")
+#new_dictionary <- subset(blah, dictionary!="t" )
+
+Wordle = function(geuss,matching,dictionary){
+  for (i in 1:length(geuss)){
+    for (j in 1:5){
+      
+      if (matching[[i]][j] == -1 ){
+        geuss_word <- as.vector(str_split_fixed(geuss[i], pattern = "", n = nchar(geuss[i])))
+        letter <- geuss_word[j]
+        new_dictionary <- subset(df,df[j]!=letter)
+        } else if (matching[[i]][j] == 0){
+        geuss_word <- as.vector(str_split_fixed(geuss[i], pattern = "", n = nchar(geuss[i])))
+        letter <- geuss_word[j]
+        new_dictionary <-       subset(new_dictionary,dictionary!=letter,V2!=letter,V3!=letter,V4!=letter,V5!=letter)
+        } else if (matching[[i]][j] == 1){
+        geuss_word <- as.vector(str_split_fixed(geuss[i], pattern = "", n = nchar(geuss[i])))
+        letter <- geuss_word[j]
+        new_dictionary <- subset(df,df[j]==letter)
+        }
+    }
+  }
+}
+    
+check = Wordle(geuss,matching,dictionary)
+    
+    
+
+```
+***6***
+***A***
+```{r}
+```
