@@ -96,40 +96,26 @@ moby_lines <- html_text2(html_nodes(webpage, 'title,p,h1,h2,h3'))
 mobybook <- paste(moby_lines, collapse = " ")
 
 
-
-chapters_1 <- webpage %>% html_text() %>% str_split(",|\\.|[:space:]")
-chapters_1 <- chapters_1[[1]]
-words <- all_words_html[all_words_html!=""]
-print(length(words))
-
 chapters = strsplit(mobybook,"\r \r \r \r \r ")
 #etymology = 
 chapters[[1]][1] <-  sub(".*\r \r ETYMOLOGY.\r \r","",chapters[[1]][1])
 chapters = chapters[[1]][1:137]
 
 
-chapters_1 <- chapters[[1]]
-words_c <- chapters[1] %>% str_split(",|\\.|[:space:]")
-words <- words_c[words_c!=""]
-print(length(words[[1]]))
-vec_words = c(1:3)
-vec_words = replace(vec_words,1, length(words[[1]]))
-
-
 #add a graph of words per chapter
 word_amount = function(chapters){
+  vec_words=vector(length=length(chapters))
   for (i in 1:length(chapters)){
-    vec_words=c(1:length(chapters))
     all_words_c <- chapters[i] %>% str_split(",|\\.|[:space:]")
     words <- all_words_c[all_words_c!=""]
-    print(length(words[[1]]))
-    replace(vec_words,vec_words == i, length(all_words_c[[1]]))
+    vec_words[i] = length(all_words_c[[1]])
   }
-
-    return(vec_words)
+return(vec_words)
 }
-
+###
 num_word <- word_amount(chapters)
+chapter_index = c(1:137)
+plot(chapter_index,word_amount(chapters))
 
 
 ```
@@ -159,13 +145,12 @@ word_frequencies = function(word,chapters){
   return(freq_vec) 
 }
 
-length(chapters_nums)
 Ahab_freq <- word_frequencies("Ahab",chapters)
 Moby_freq <- word_frequencies("Moby",chapters)
 Sea_freq <- word_frequencies("sea",chapters)
 
+##
 plot(chapters_nums,Ahab_freq)
-
 
 ```
 ***3***
@@ -555,7 +540,7 @@ wordle_match <- function(guess, word)  # 1: correct location, -1: wrong location
 
 
 ```{r}
-strat2 = function(word_list, unknown_word){
+strat2 = function(word_list, unknown_word,if_print=TRUE){
   unknown_word_2 = as.vector(str_split_fixed(unknown_word, pattern = "", n = nchar(unknown_word_2)))
   #using 4 in order to find freq of words_string and find the starting word
   wordle_freq <- table(let = unlist(strsplit(word_list,'')),pos = sequence(nchar(word_list)))
@@ -565,6 +550,7 @@ picked_word<- sort(frequency_words , decreasing = TRUE)[1]
 picked_word <- names(picked_word)
 
 new_df <- word_list
+counter = 0 
   while (!identical(picked_word,unknown_word)){
   vec_array = wordle_match(picked_word, unknown_word)
   
@@ -578,8 +564,12 @@ frequency_words = probabilities(wordle_prob,new_df)
 picked_word<- sort(frequency_words , decreasing = TRUE)[1]
 picked_word <- names(picked_word)
 counter = counter +1 
+if(if_print == TRUE){
+  print(picked_word)
+
+}
   }
-  return(picked_word)
+  print(counter)
 }
 
 unknown_word <- "mouse"
