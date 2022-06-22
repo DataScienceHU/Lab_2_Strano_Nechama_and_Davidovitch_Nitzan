@@ -466,7 +466,7 @@ Run the function when the unknown word is "mouse", and show the results.
 ```{r}
 
 set.seed(1)
-strategy_one = function(unknown){
+strategy_one = function(unknown,tn=TRUE){
   # splitting unknown word into 5 letters
   unknown_word = as.vector(str_split_fixed(unknown, pattern = "", n = nchar(unknown)))
   # guessing 5 random letters
@@ -487,8 +487,10 @@ strategy_one = function(unknown){
     guessed_array = str_c(guess_array,collapse="")
   }
       
-      print(cbind(guessed_word,guessed_array))
-  }
+if (tn==TRUE){
+        print(cbind(guessed_word,guessed_array))
+
+      }  }
   return (guess_count)
 }
 
@@ -546,11 +548,11 @@ compare also the empirical expectation with the expectation computed in (b.). Ho
 
 ```{r}
 set.seed(1)
-monte_carlo <-replicate(100,strategy_one(sample(words_string,1)))
+sampled_word = sample(words_string,1)
+monte_carlo <-replicate(100,strategy_one(sampled_word,tn=FALSE))
 mean(monte_carlo)
 plot(ecdf(monte_carlo))
 points <- seq(1:100)
-
 
 #better plot??
 
@@ -594,7 +596,7 @@ wordle_match <- function(guess, word)  # 1: correct location, -1: wrong location
 
 ```{r}
 strat2 = function(word_list, unknown_word,if_print=TRUE){
-  unknown_word_2 = as.vector(str_split_fixed(unknown_word, pattern = "", n = nchar(unknown_word_2)))
+  unknown_word_2 = as.vector(str_split_fixed(unknown_word, pattern = "", n = nchar(unknown_word)))
   #using 4 in order to find freq of words_string and find the starting word
   wordle_freq <- table(let = unlist(strsplit(word_list,'')),pos = sequence(nchar(word_list)))
 wordle_prob = wordle_freq/(length(word_list))
@@ -627,7 +629,7 @@ if(if_print == TRUE){
 
 unknown_word <- "mouse"
 a_df <- strat2(words_string, unknown_word,if_print=FALSE)
-a_df
+
 
 ```
 
@@ -635,11 +637,12 @@ a_df
 **Strategy 3:** 
 
 ```{r}
-strat3 = function(word_list, unknown_word){
+strat3 = function(word_list, unknown_word,if_print=TRUE){
   picked_word = sample(word_list,1)
   #using 4 in order to find freq of words_string and find the starting word
  
 new_df <- word_list
+counter = 0 
   while (!identical(picked_word,unknown_word)){
   vec_array = wordle_match(picked_word, unknown_word)
   
@@ -648,12 +651,17 @@ new_df = Wordle(picked_word,vec_array,new_df)
 
 #choosing new word
   picked_word = sample(word_list,1)
-  }
-  return(picked_word)
+  counter = counter +1
+  if(if_print == TRUE){
+  print(picked_word)
+
 }
+  }
+  print(counter)
+  }
 
 unknown_word <- "mouse"
-strat3(words_string, unknown_word)
+strat3(words_string, unknown_word,if_print = FALSE)
 
 
 ```
@@ -663,24 +671,19 @@ That is, each time, sample a random unknown word,  run the two strategies $2$ an
 
 - Plot the empirical CDFs of the number of guesses. How similar are they to each other? how similar are they to the CDF of strategy 1? What are the empirical means for both strategies?  
 
-**Strategy 2 simulation:** 
+**Strategy 2 and 3 simulation:** 
 
 ```{r}
 
-new_word = sample(words_string,1)
-strat2_tries = sum(replicate(100,strat2(words_string,new_word,if_print=FALSE)))
-strat3_tries = sum(replicate(100,strat3(words_string,new_word,if_print=FALSE)))
+random_words = sample(words_string,100,replace = TRUE)
+strat2_tries=sapply(random_words,function(new_word){strat2(words_string,new_word,if_print=FALSE)})
+strat3_tries=sapply(random_words,function(new_word){strat3(words_string,new_word,if_print=FALSE)})
 
-
-```
-
-**Strategy 3 simulation:** 
-
-
-```{r}
-
+strat2_mean = mean(strat2_tries)
+strat3_mean = mean(strat3_tries)
 
 ```
+
 
 
 
